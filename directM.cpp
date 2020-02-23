@@ -3,31 +3,43 @@
 #include<iostream>
 using namespace std;
 
-DirectM::DirectM(int mesCnt) {
-
-	for (int i = 0; i < MAX_NUM; i++) {
+DirectM::DirectM() {
+	for (int i = 0; i < MAX_NUM; i++) 
 		myMessage[i] = "";
-	} 
 	mesCnt = 0;
 }
 
 void DirectM::prnMessage(){
-
-	// cout << "------- 메세지 보관함 -------" << endl;
-	// cout << endl;
+	if (mesCnt == 0) {
+		cout << "-----------------------------------" << endl;
+		cout << endl;
+		cout << "표시할 메세지 내용이 없습니다." << endl;
+		cout << endl;
+		cout << "-----------------------------------" << endl;
+	}
 
 	for (int i = 0; i < mesCnt; i++) {
-		cout << i <<'.'<< myMessage[i] << endl;
+		cout << i + 1 << '.' << myMessage[i] << endl;
 	}
-	// cout << "----------------------------------" << endl;
 }
 
-string DirectM::write(string str) {
-
-	cout << "보낼 메세지를 입력하세요: ";
-	getline(cin, str);
-	myMessage[mesCnt] = str;
-	return str;
+string DirectM::write(string id,string str) {
+	int i;
+	string tmp;
+	tmp = id;
+	tmp += "->";
+	tmp += str;
+	// 메시지함이 꽉 차있는 경우 밀어내기 진행
+	if (mesCnt == MAX_NUM) {
+		for (i = 0; i < mesCnt - 1; i++) 
+			myMessage[i] = myMessage[i + 1];
+		myMessage[i] = tmp;
+	}
+	else {
+		myMessage[mesCnt] = tmp;
+		mesCnt++;
+	}
+	return tmp;
 }
 
 bool DirectM::deleteP(int pageNum) {

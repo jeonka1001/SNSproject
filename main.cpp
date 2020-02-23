@@ -16,40 +16,29 @@
 #include <Windows.h>
 using namespace std;
 
-//// 임시로 넣어놨습니다
-//class Account
-//{
-//private:
-//	string myID;
-//public:
-//	Account(string myID = "") { this->myID = myID; }
-//	string getID() { return myID; }
-//	Account *getMyObj() { return this; } // Account 클래스에 해당 함수 추가 부탁드릴게요!
-//};
-
 void screen(); 
-void signUp(list<Account> &accList);
-void login(list<Account> &accList);
+void signUp(list<Account> &accList); // 회원가입 함수
+void login(list<Account> &accList); // 로그인 함수
 
-void manageMessage(list<Account> &accList, Account *ap);
-void manageMyMessage(Account *ap);
-void sendMessage(list<Account> &accList, Account *ap);
+void manageMessage(list<Account> &accList, Account *ap); // 메시지 관리 함수
+void manageMyMessage(Account *ap); // 내 메시지함 관리 함수
+void sendMessage(list<Account> &accList, Account *ap); // 메시지 전송 함수
 
-void manageTimeLine(list<Account> &accList, Account *ap);
-void manageMyTimeLine(Account *ap);
-void writeTimeLine(Account *ap);
-void deleteTimeLine(Account *ap);
-void showFriendTimeLine(list<Account> &accList, Account *ap);
+void manageTimeLine(list<Account> &accList, Account *ap); // 타임 라인 함수
+void manageMyTimeLine(Account *ap); // 내 타임 라인 함수
+void writeTimeLine(Account *ap); // 타임라인 작성 함수
+void deleteTimeLine(Account *ap); // 타임라인 삭제 함수
+void showFriendTimeLine(list<Account> &accList, Account *ap); // 맞팔친구 타임라인 관리 함수
 
-void manageFriend(list<Account> &accList, Account *ap);
-void showFollowing(list<Account> &accList, Account *ap);
-void showFollower(Account *ap);
-void manageInfo(Account *ap);
-bool withDrawAccount(list<Account> &accList, list<Account>::iterator it);
+void manageFriend(list<Account> &accList, Account *ap); // 친구 관리 함수
+void showFollowing(list<Account> &accList, Account *ap); // 팔로잉 관리 함수
+void showFollower(Account *ap); // 팔로워 관리 함수
+void manageInfo(Account *ap); // 내 정보 관리 함수 // 미작성
+bool withDrawAccount(list<Account> &accList, list<Account>::iterator it); // 계정 탈퇴 함수
 
-void inputInfoString(const char *stp, string &str, int num);
-int inputMenuNum(const char *message, int n);
-int inputInteger(const char *message);
+void inputInfoString(const char *stp, string &str, int num); // 내 정보 입력 함수
+int inputMenuNum(const char *message, int n); // 메뉴번호 입력 함수
+int inputInteger(const char *message); // 정수 입력 함수
 void myFlush();
 
 int main()
@@ -62,9 +51,17 @@ void screen()
 {
 	int menuNum;
 	list<Account> accList; // Account 객체들를 관리하는 리스트, 즉 계정들을 관리하는 리스트
+	list<Account>::iterator it;
 
 	while (1) {
 		system("cls");
+
+		// 향후 삭제
+		cout << "\n디버깅용 계정 리스트 출력(향후 삭제)" << endl;
+		for (it = accList.begin(); it != accList.end(); it++)
+			cout << it->getID() << endl;
+		cout << endl;
+
 		cout << "*****************" << endl;
 		cout << "< 간단 SNS 프로그램 >" << endl;
 		cout << "1. 로그인\n2. 회원가입\n3. 종료" << endl;
@@ -122,7 +119,6 @@ void signUp(list<Account> &accList)
 
 	// account 객체 생성 뒤 리스트에 추가
 	Account temp(name, age, addr, gender, phoneNumber, id);
-	cout << "check" << endl;
 	accList.push_back(temp);
 
 	cout << "계정이 생성되었습니다." << endl;
@@ -210,22 +206,33 @@ void manageMyMessage(Account *ap)
 		cout << "'" << ap->getID() << "'" << " 님의 계정 관리" << endl;
 		cout << "* 내 보관함 *" << endl;
 
-		//// 내 메시지 일괄 출력
-		//ap->prnPage(DIRECTM_INDEX);
+		// 내 메시지 일괄 출력
+		ap->prnPage(DIRECTM_INDEX);
 
-		messageIndex = inputInteger("삭제할 메시지 번호를 입력 : ");
-		cout << "삭제하시겠습니까?(Y/N) : ";
+		cout << "메세지를 삭제하시겠습니까?(Y/N) : ";
 		cin >> answer;
+
 		if (answer == 'y' || answer == 'Y') {
-
-			//// 해당 인덱스의 메시지 삭제
-			// ap->deletePage(DIRECTM_INDEX, num);
-            //// 삭제된 공간 채우는 작업
-
-			cout << "삭제가 완료되었습니다.." << endl;
-			cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
-			Sleep(2000);
-			return;
+			
+			messageIndex = inputInteger("삭제할 메시지 번호를 입력 : ");
+			cout << "삭제하시겠습니까?(Y/N)";
+			cin >> answer;
+			if (answer == 'y' || answer == 'Y') {
+				// 해당 인덱스의 메시지 삭제
+				if (ap->deletePage(DIRECTM_INDEX, messageIndex) == true) {
+					cout << "삭제가 완료되었습니다.." << endl;
+					cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
+					Sleep(2000);
+					return;
+				}
+			}
+				// 잘못된 인덱스 입력
+			else {
+				cout << "삭제를 실패했습니다.." << endl;
+				cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+				return;
+			}
 		}
 		else if (answer == 'n' || answer == 'N') {
 			cout << "삭제가 진행되지 않았습니다." << endl;
@@ -237,7 +244,6 @@ void manageMyMessage(Account *ap)
 			cout << "정상적인 문자를 입력하십시오." << endl;
 			myFlush();
 		}
-		
 	}
 }
 
@@ -259,13 +265,13 @@ void sendMessage(list<Account> &accList, Account *ap)
 		Sleep(2000);
 		return;
 	}
-	
+
 	inputInfoString("보낼 메시지 입력 : ", message, MESSAGE_SIZE);
 
 	// 자신의 아이디를 입력한 경우 자신의 메시지함에 추가하고 메시지 관리화면으로 이동
 	if (id == ap->getID()) {
-		// 메시지함에 메시지 추가
-		// 메시지함이 꽉차있는 경우 밀어내기 진행
+		// 나의 메시지함에 메시지 추가
+		ap->writePage(DIRECTM_INDEX, message,id);
 		cout << "* 나에게 메시지 전송이 완료되었습니다 *" << endl;
 		cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
 		Sleep(2000);
@@ -274,16 +280,23 @@ void sendMessage(list<Account> &accList, Account *ap)
 
 	// 메시지는 맞팔 상대에게만 보낼 수 있음
 	for (it = accList.begin(); it != accList.end(); it++) {
-		// 서로 팔로우가 되어있는 경우 즉 맞팔
-		//if (it->followerCheck(ap->getID()) == true && ap->follwerCheck(it->getID()) == true) {
-		//	// 그 중에서 입력한 아이디와 일치하는 객체를 찾으면
-		//	if (it->getID() == id) {
-		//		// it 이 가리키는 객체(메시지를 받는 상대)의 메시지함에 메시지를 추가
-		//		// 메시지함이 꽉차있는 경우 밀어내기 진행
-		//	}
-		// }	
+		// 자기 자신은 넘어감. 향후 삭제 가능
+		if (it->getID() == ap->getID())
+			continue;
+		// 서로 팔로우가 되어있는 경우, 즉 맞팔인 경우
+		if (it->followerCheck(ap->getID()) == true && ap->followerCheck(it->getID()) == true) {
+			// 그 중에서 입력한 아이디와 일치하는 객체를 찾으면
+			if (it->getID() == id) {
+				// it 이 가리키는 객체(메시지를 받는 상대)의 메시지함에 메시지를 추가
+				it->writePage(DIRECTM_INDEX, message,ap->getID());
+				cout << "* 전송이 완료 되었습니다 * " << endl;
+				cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+				return;
+			}
+		 }	
 	}
-	cout << "* 전송이 완료 되었습니다 * " << endl;
+	cout << "서로 팔로우 되어있지 않으면 메시지를 보낼 수 없습니다." << endl;
 	cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
 	Sleep(2000);
 }
@@ -314,8 +327,8 @@ void manageMyTimeLine(Account *ap)
 		cout << "'" << ap->getID() << "'" << " 님의 계정 관리" << endl;
 		cout << "* 내 타임라인 메뉴 *" << endl;
 		
-		//// 내 타임라인 일괄 출력
-		//ap->prnPage(TIMELINE_INDEX);
+		// 내 타임라인 일괄 출력
+		ap->prnPage(TIMELINE_INDEX);
 		
 		cout << "1. 내 타임라인 작성\n2. 내 타임라인 삭제\n3. 나가기" << endl;
 		menuNum = inputMenuNum("선택 : ", 3);
@@ -334,25 +347,49 @@ void writeTimeLine(Account *ap)
 	system("cls");
 	inputInfoString("타임라인 작성할 내용 입력 : ", timeLineMessage, 40);
 
-	//// 내 타임라인에 내용 추가 
-	// 타임라인이 꽉찼을 경우 밀어내기
+	ap->writePage(TIMELINE_INDEX, timeLineMessage,ap->getID());
 	cout << "작성 완료되었습니다." << endl; 
-	cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
+	cout << "2초 뒤 타임라인 관리 메뉴로 돌아갑니다..." << endl;
 	Sleep(2000);
 }
 
 void deleteTimeLine(Account *ap)
 {
 	int timeLineIndex;
-	system("cls");
-	timeLineIndex = inputMenuNum("삭제할 타임라인 번호 : ", 9999); // 9999대신 타임라인 개수 들어가야함
-	
-    //// 해당 인덱스의 타임라인 삭제
-	//ap->deletePage(TIMELINE_INDEX, timeLineNum);
-	//// 삭제된 공간 채우는 작업
-	cout << "삭제 완료되었습니다." << endl;
-	cout << "2초 뒤 메시지 관리 메뉴로 돌아갑니다..." << endl;
-	Sleep(2000);
+	char answer;
+
+	while (1) {
+		system("cls");
+		timeLineIndex = inputInteger("삭제할 타임라인 번호를 입력 : ");
+		cout << "삭제하시겠습니까?(Y/N) : ";
+		cin >> answer;
+		if (answer == 'y' || answer == 'Y') {
+			// 해당 인덱스의 타임라인 삭제
+			if (ap->deletePage(TIMELINE_INDEX, timeLineIndex) == true) {
+				cout << "삭제가 완료되었습니다.." << endl;
+				cout << "2초 뒤 타임라인 관리 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+				return;
+			}
+			// 잘못된 인덱스 입력
+			else {
+				cout << "삭제를 실패했습니다.." << endl;
+				cout << "2초 뒤 타임라인 관리 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+				return;
+			}
+		}
+		else if (answer == 'n' || answer == 'N') {
+			cout << "삭제가 진행되지 않았습니다." << endl;
+			cout << "2초 뒤 타임관리 메뉴로 돌아갑니다..." << endl;
+			Sleep(2000);
+			return;
+		}
+		else {
+			cout << "정상적인 문자를 입력하십시오." << endl;
+			myFlush();
+		}
+	}
 }
 
 void showFriendTimeLine(list<Account> &accList, Account *ap)
@@ -360,17 +397,19 @@ void showFriendTimeLine(list<Account> &accList, Account *ap)
 	list<Account>::iterator it;
 	system("cls");
 	cout << "'" << ap->getID() << "'" << " 님의 계정 관리" << endl;
+	
 	// 친구들의 타임라인 일괄 출력
-	// 여기서 친구는 맞팔되어있는 사람들만 해당
+	// 여기서 친구는 맞팔이 아닌 내가 팔로잉하고 있는 모든 사람
 	for (it = accList.begin(); it != accList.end(); it++) {
-		//// 서로 팔로우가 되어있는 경우 즉 맞팔
-		//if (it->followerCheck(ap->getID()) == true && ap->follwerCheck(it->getID()) == true) {
-		//	cout << "'" << it->getID() << "'" << " 님의 타임라인" << endl;
-		//	it->prnPage(TIMELINE_INDEX);
-		//	cout << endl;
-		//}
+		// 팔로잉을 하고 있는 경우
+		if (it->followerCheck(ap->getID()) == true) {
+			cout << "'" << it->getID() << "'" << " 님의 타임라인" << endl;
+			it->prnPage(TIMELINE_INDEX);
+			cout << endl;
+		}
 	}
-	// 엔터나 아무키 입력시 타임라인 메뉴로 이동
+	cout << "아무 키나 입력하면 타임라인 관리 메뉴로 이동합니다..." << endl;
+	getchar();
 }
 
 // 친구 관리 함수
@@ -403,8 +442,10 @@ void showFollowing(list<Account> &accList, Account *ap)
 		system("cls");
 		cout << "'" << ap->getID() << "'" << " 님의 계정 관리" << endl;
 		cout << "* 팔로잉 메뉴 *" << endl;
-		//// 팔로잉한 친구 목록 출력
-		//ap->prnFollowing();
+		cout << "'" << ap->getID() << "'" << " 님의 팔로잉" << endl;
+		cout << "-----------------------------------" << endl;
+		ap->prnFollowing();
+		cout << "-----------------------------------" << endl;
 		cout << "1. 팔로잉 추가\n2. 팔로잉 삭제\n3. 나가기" << endl;
 		menuNum = inputMenuNum("선택 : ", 3);
 		switch (menuNum) {
@@ -430,13 +471,19 @@ void showFollowing(list<Account> &accList, Account *ap)
 				break;
 			}
 
-			//// 입력받은 아이디가 내 팔로잉 목록에 없는 경우 목록에 추가
-			//if ((ap->followingCheck(id)) == false) {
-			//	ap->addFollowing(id); // 내 팔로잉 목록에 상대방 아이디 추가
-			//	it->addFollower(ap->getID()); // 상대방 팔로워 목록에 내 아이디 추가
-			//	cout << "추가 되었습니다." << endl;
-			//}
-			//else { cout << "이미 팔로잉 되어있는 계정입니다." << endl; }
+			// 입력받은 아이디가 내 팔로잉 목록에 없는 경우 목록에 추가
+			if ((ap->followingCheck(id)) == false) {
+				ap->addFollowing(id); // 내 팔로잉 목록에 상대방 아이디 추가
+				it->addFollower(ap->getID()); // 상대방 팔로워 목록에 내 아이디 추가
+				cout << "추가 되었습니다." << endl;
+				cout << "2초 뒤 팔로잉 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+			}
+			else { 
+				cout << "이미 팔로잉 되어있는 계정입니다." << endl; 
+				cout << "2초 뒤 팔로잉 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+			}
 			break;
 
 		case 2:
@@ -460,13 +507,19 @@ void showFollowing(list<Account> &accList, Account *ap)
 				Sleep(2000);
 				break;
 			}
-			//// 입력받은 아이디가 내 팔로잉 목록에 있는 경우 목록에서 삭제
-			//if ((ap->followingCheck(id)) == true) {
-			//	ap->delFollowing(id); // 내 팔로잉 목록에서 상대방 아이디 삭제
-			//	it->delFollower(ap->getID()); // 상대방 팔로워 목록에서 내 아이디 삭제
-			//	cout << "삭제 되었습니다." << endl;
-			//}
-			//else { cout << "팔로잉 되어있지 않은 계정입니다." << endl; }
+			// 입력받은 아이디가 내 팔로잉 목록에 있는 경우 목록에서 삭제
+			if ((ap->followingCheck(id)) == true) {
+				ap->delFollowing(id); // 내 팔로잉 목록에서 상대방 아이디 삭제
+				it->delFollower(ap->getID()); // 상대방 팔로워 목록에서 내 아이디 삭제
+				cout << "삭제 되었습니다." << endl;
+				cout << "2초 뒤 팔로잉 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+			}
+			else { 
+				cout << "팔로잉 되어있지 않은 계정입니다." << endl; 
+				cout << "2초 뒤 팔로잉 메뉴로 돌아갑니다..." << endl;
+				Sleep(2000);
+			}
 			break;
 		case 3: return;
 		}
@@ -476,36 +529,56 @@ void showFollowing(list<Account> &accList, Account *ap)
 // 나에게 팔로우 되어있는 친구 목록 출력 함수
 void showFollower(Account *ap)
 {
+	system("cls");
 	cout << "'" << ap->getID() << "'" << " 님의 팔로워" << endl;
-	// ap->prnFollower();
-	// 엔터치면 친구 관리 메뉴로 이동
-	// 향후 작성
+	cout << "-----------------------------------" << endl;
+	ap->prnFollower();
+	cout << "-----------------------------------" << endl;
+	cout << "아무 키나 입력하면 친구 관리 메뉴로 이동합니다..." << endl;
+	getchar();
 }
 
 // 내 정보 관리 함수
+// 작성 부탁 드릴게요!
 void manageInfo(Account *ap)
 {
 	int num;
 	system("cls");
 	cout << "'" << ap->getID() << "'" << " 님의 계정 관리" << endl;
 	cout << "* 내 정보 관리 메뉴 *" << endl;
-	// 내 정보 일괄 출력(아이디 제외)
-	// 향후 작성
+	
+	ap->prnInfo();
+
 	num = inputMenuNum("수정할 항목 입력 : ", 5);
-	// 해당정보수정
-	// 향후 작성
+	
+	ap->setInfo(num);
 }
 
 // 계정 탈퇴 함수
 // 탈퇴 성공 시 true, 아니면 false 를 리턴
 bool withDrawAccount(list<Account> &accList, list<Account>::iterator it)
 {
+	list<Account>::iterator it_t;
+	string temp;
 	char answer;
 	while (1) {
 		cout << "계정을 탈퇴하시겠습니까?(Y/N) : ";
 		cin >> answer;
 		if (answer == 'y' || answer == 'Y') {
+			// temp 에 탈퇴계정의 아이디를 넣어놓는다
+			// 이 temp 를 이용하여 해당 계정의 다른 계정들에서의 팔로우, 팔로잉을 삭제한다
+			temp = it->getID();
+
+			// 해당 계정 리스트에서 삭제
 			accList.erase(it);
+
+			// 해당 계정의 팔로우, 팔로잉 정보를 모든 리스트의 계정에서 삭제
+			for (it_t = accList.begin(); it_t != accList.end(); it_t++) {
+				if (it_t->followingCheck(temp) == true) 
+					it_t->delFollowing(temp);
+				if (it_t->followerCheck(temp) == true) 
+					it_t->delFollower(temp);
+			}
 			cout << "탈퇴가 완료되었습니다." << endl;
 			cout << "2초 뒤 시작화면으로 돌아갑니다..." << endl;
 			Sleep(2000);

@@ -19,12 +19,12 @@ Information::Information(string myID, string name, char gender, int age, string 
 
 void Information::printInformation()
 {
-	cout << "ID : " << this->myID << endl;
-	cout << "이름 : " << this->name << endl;
-	cout << "성별 : " << this->gender << endl;
-	cout << "나이 : " << this->age << endl;
-	cout << "전화번호 : " << this->phoneNum << endl;
-	cout << "주소 : " << this->address << endl;
+	//cout << "ID : " << this->myID << endl;
+	cout << "1.이름 : " << this->name << endl;
+	cout << "2.성별 : " << this->gender << endl;
+	cout << "3.나이 : " << this->age << endl;
+	cout << "4.전화번호 : " << this->phoneNum << endl;
+	cout << "5.주소 : " << this->address << endl;
 }
 
 string Information::getMyID()
@@ -55,11 +55,6 @@ string Information::getPhoneNum()
 string Information::getAddress()
 {
 	return (this->address);
-}
-
-void Information::setMyID(string newMyID)
-{
-	this->myID = newMyID;
 }
 
 void Information::setName(string newName)

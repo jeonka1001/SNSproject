@@ -8,8 +8,8 @@ private:
 	string myMessage[MAX_NUM];
 	int mesCnt;
 public:
-	Timeline(int mesCnt = 0); 
-	string write(string str="");
+	Timeline(); 
+	string write(string id,string str="");
 	bool deleteP(int pageNum=0);
 	void prnMessage();
 	int searchP(int pageNum = 0);

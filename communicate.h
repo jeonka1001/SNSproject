@@ -6,7 +6,7 @@ using namespace std;
 
 struct Communicate {
 
-	virtual string write(string str) = 0;
+	virtual string write(string id,string str) = 0;
 	virtual bool deleteP(int num) = 0;
 	virtual void prnMessage() = 0;
 	virtual int searchP(int num) = 0;

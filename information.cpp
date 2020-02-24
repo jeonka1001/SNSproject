@@ -19,7 +19,6 @@ Information::Information(string myID, string name, char gender, int age, string 
 
 void Information::printInformation()
 {
-	//cout << "ID : " << this->myID << endl;
 	cout << "1.이름 : " << this->name << endl;
 	cout << "2.성별 : " << this->gender << endl;
 	cout << "3.나이 : " << this->age << endl;

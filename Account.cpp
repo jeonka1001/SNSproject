@@ -1,8 +1,6 @@
+#include "define.h"
 #include "Account.h"
 
-// find 함수를 통해서 탐색을 진행할 때 찾으려는 대상이 리스트에 없으면
-// end()를 리턴해서 it이 end()를 가리키게 되는데, end() 가 아마 리스트 밖의 메모리를 가리키는 것 같아요
-// 그래서 (*it) 이렇게 접근하면 계속 런타임 에러가 나서 전체적으로 약간 수정했습니다.
 bool Account::addFollowing(string following){
     list<string>::iterator it; 
     it=find(this->following.begin(),this->following.end(),following);
@@ -154,32 +152,73 @@ int Account::getPageNum(int page){
     return cp->getMesCnt();
 }
 void Account::setInfo(int num){
-    cout <<"수정할 내용 입력:";
-    
-    if(num==1){
-        string name;
-        cin>> name;
-        myInfo.setName(name);
-    }
-    else if(num == 2){
-		char gen;
-		cin >> gen;
-		myInfo.setGender(gen);
-    }
-    else if(num ==3){
-		int age;
-		cin >> age;
-		myInfo.setAge(age);
- 
-    }
-    else if(num == 4){
-        string phone;
-        cin >> phone;
-        myInfo.setPhoneNum(phone);
-    }
-    else{
-		string add;
-		cin >> add;
-		myInfo.setAddress(add);
-    }
+	while (1) {
+		cout << "수정할 내용 입력 : ";
+
+		// 이름 입력
+		if (num == 1) {
+			string name;
+			getline(cin, name);
+			if (name.length() >= NAME_SIZE) {
+				cout << "이름은 " << NAME_SIZE << "자를 넘을 수 없습니다." << endl;
+				continue;
+			}
+			myInfo.setName(name);
+			break;
+		}
+		// 성별 입력
+		else if (num == 2) {
+			char gen;
+			cin >> gen;
+			if (gen == 'M' || gen == 'm' || gen == 'F' || gen == 'f') { 
+				myInfo.setGender(gen);
+				break; 
+			}
+			cin.clear();
+			while (cin.get() != '\n');
+		}
+		// 나이 입력
+		else if (num == 3) {
+			int age;
+			cin >> age;
+			if (cin.get() == '\n') { 
+				if (age >= 1) { 
+					myInfo.setAge(age);
+					break; 
+				}
+				else { continue; }
+			}
+			cin.clear();
+			while (cin.get() != '\n');
+		}
+		// 전화번호 입력
+		else if (num == 4) {
+			string phone;
+			cin >> phone;
+			if (cin.get() == '\n') {
+				if (phone.length() >= PHONE_NUMBER_SIZE) {
+					cout << "전화번호는 " << PHONE_NUMBER_SIZE << "를 넘을 수 없습니다." << endl;
+					continue;
+				}
+				myInfo.setPhoneNum(phone);
+				break;
+			}
+			else {
+				cout << "전화번호에는 공백을 입력할 수 없습니다." << endl;
+				cin.clear();
+				while (cin.get() != '\n');
+			}
+		}
+		// 거주지 입력
+		else {
+			string add;
+			getline(cin, add);
+			if (add.length() >= ADDR_SIZE) {
+				cout << "거주지는 " << ADDR_SIZE << "자를 넘을 수 없습니다." << endl;
+				continue;
+			}
+			myInfo.setAddress(add);
+			break;
+		}
+	}
 }

@@ -18,7 +18,7 @@ void Timeline::prnMessage() {
 	}
 	cout << "----------------------------------------------" << endl;
 	for (int i = 0; i < mesCnt; i++) {
-		cout << "타임라인" << i + 1 << '.' << myMessage[i] << endl;
+		cout << "타임라인" << i + 1 << ". " << myMessage[i] << endl;
 		cout << "----------------------------------------------" << endl;
 	}
 }
